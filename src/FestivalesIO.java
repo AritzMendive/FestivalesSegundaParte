@@ -44,11 +44,15 @@ public class FestivalesIO {
        String[] dividir = lineaFestival.trim().split(":");
        String nombre = nombreMayusc(dividir[0].trim());
        String lugar = dividir[1].trim().toUpperCase();
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
        LocalDate fechainicio = LocalDate.parse(dividir[2].trim(), formatter);
        int duracion = Integer.parseInt(dividir[3].trim());
+        HashSet<Estilo> estilos = new HashSet<>();
+        for (int i = 4; i < dividir.length; i++) {
+            estilos.add(Estilo.valueOf(dividir[i].trim().toUpperCase()));
+        }
         
-        return null;
+        return new Festival(nombre, lugar, fechainicio, duracion, estilos);
     }
 
     private static String nombreMayusc(String linea){

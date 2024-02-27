@@ -1,5 +1,7 @@
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 
 /**
@@ -59,10 +61,35 @@ public class Festival {
      *
      */
     public Mes getMes() {
-        //TODO
-        
-        return null;
-        
+        int mesNumero = fechaInicio.getMonthValue();
+        switch (mesNumero) {
+            case 1:
+                return Mes.ENERO;
+            case 2:
+                return Mes.FEBRERO;
+            case 3:
+                return Mes.MARZO;
+            case 4:
+                return Mes.ABRIL;
+            case 5:
+                return Mes.MAYO;
+            case 6:
+                return Mes.JUNIO;
+            case 7:
+                return Mes.JULIO;
+            case 8:
+                return Mes.AGOSTO;
+            case 9:
+                return Mes.SEPTIEMBRE;
+            case 10:
+                return Mes.OCTUBRE;
+            case 11:
+                return Mes.NOVIEMBRE;
+            case 12:
+                return Mes.DICIEMBRE;
+            default:
+                return null;
+        }
     }
 
     /**
@@ -72,9 +99,8 @@ public class Festival {
      * en un fecha anterior a otro
      */
     public boolean empiezaAntesQue(Festival otro) {
-        //TODO
-        
-        return true;
+
+        return this.fechaInicio.isBefore((otro.fechaInicio));
         
     }
 
@@ -85,9 +111,8 @@ public class Festival {
      * en un fecha posteior a otro
      */
     public boolean empiezaDespuesQue(Festival otro) {
-        //TODO
-        
-        return true;
+
+        return this.fechaInicio.isAfter(otro.fechaInicio);
         
     }
 
@@ -96,9 +121,8 @@ public class Festival {
      * @return true si el festival ya ha concluido
      */
     public boolean haConcluido() {
-        //TODO
-        
-        return true;
+        LocalDate hoy = LocalDate.now();
+        return hoy.isAfter(fechaInicio.plusDays(duracion)) ;
 
     }
 
@@ -109,12 +133,20 @@ public class Festival {
      */
     @Override
     public String toString() {
-       //TODO
-        
-        return null;
-        
-    }
+        String estado = haConcluido() ? "(concluido)" : "(quedan " +
+                ChronoUnit.DAYS.between(LocalDate.now(), fechaInicio.plusDays(duracion)) + " días)";
 
+        StringBuilder sb = new StringBuilder();
+        sb.append(nombre).append(" ").append(estilos).append("\n").append(lugar).append("\n").append(fechaInicio.format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+
+        if (duracion > 1) {
+            sb.append(" - ").append(fechaInicio.plusDays(duracion - 1).format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+        }
+
+        sb.append(" ").append(estado).append("\n").append("-".repeat(60)).append("\n");
+
+        return sb.toString();
+    }
     /**
      * Código para probar la clase Festival
      *
