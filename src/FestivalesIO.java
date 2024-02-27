@@ -42,16 +42,23 @@ public class FestivalesIO {
      */
     public static Festival parsearLinea(String lineaFestival) {
        String[] dividir = lineaFestival.trim().split(":");
-       String nombre = dividir[0].trim();
-       nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
+       String nombre = nombreMayusc(dividir[0].trim());
        String lugar = dividir[1].trim().toUpperCase();
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-       LocalDate fechainicio = LocalDate.parse(dividir[2], formatter);
+       LocalDate fechainicio = LocalDate.parse(dividir[2].trim(), formatter);
        int duracion = Integer.parseInt(dividir[3].trim());
         
         return null;
     }
-    
+
+    private static String nombreMayusc(String linea){
+        StringBuilder sb = new StringBuilder();
+        String[] palabras = linea.split("\\s+");
+        for(String palabra : palabras){
+            sb.append(Character.toUpperCase(palabra.charAt(0))).append(palabra.substring(1).toLowerCase()).append(" ");
+        }
+        return sb.toString().trim();
+    }
    
     
     
