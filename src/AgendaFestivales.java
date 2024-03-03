@@ -1,9 +1,5 @@
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 
 /**
@@ -100,7 +96,9 @@ public class AgendaFestivales {
      * Si el mes no existe se devuelve -1
      */
     public int festivalesEnMes(Mes mes) {
-       //TODO
+       if(agenda.containsKey(mes)){
+           return agenda.get(mes).size();
+       }
         
         return 0;
     }
@@ -114,12 +112,20 @@ public class AgendaFestivales {
      *
      * Identifica el tipo exacto del valor de retorno
      */
-    public  Map   festivalesPorEstilo() {
-       //TODO
-
-         
-
-        return null;
+    public Map<Estilo, TreeSet<String>> festivalesPorEstilo() {
+        Map<Estilo, TreeSet<String>> festivalesPorEstilo = new TreeMap<>();
+        for (Mes mes : agenda.keySet()) {
+            ArrayList<Festival> festivalesMes = agenda.get(mes);
+            for (Festival festival : festivalesMes) {
+                for (Estilo estilo : festival.getEstilos()) {
+                    if (!festivalesPorEstilo.containsKey(estilo)) {
+                        festivalesPorEstilo.put(estilo, new TreeSet<>());
+                    }
+                    festivalesPorEstilo.get(estilo).add(festival.getNombre());
+                }
+            }
+        }
+        return festivalesPorEstilo;
     }
 
     /**
@@ -133,8 +139,23 @@ public class AgendaFestivales {
      * se borra la entrada completa del map
      */
     public int cancelarFestivales(HashSet<String> lugares, Mes mes) {
-       //TODO
+       if(!agenda.containsKey(mes)){
+           return -1;
+       }
+       ArrayList<Festival> festivales = agenda.get(mes);
+       int tamanyoInicial = festivales.size();
+       Iterator<Festival> it = festivales.iterator();
+       while (it.hasNext()){
+           Festival festival = it.next();
+           if(!festival.haConcluido() && lugares.contains(festival.getLugar())){
+               it.remove();
+           }
+       }
+       if(festivales.isEmpty()){
+           agenda.remove(mes);
+       }
+
         
-        return 0;
+        return tamanyoInicial - festivales.size();
     }
 }
