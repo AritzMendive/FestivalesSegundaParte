@@ -42,7 +42,13 @@ public class AgendaFestivales {
      *
      */
     public void addFestival(Festival festival) {
-        //TODO
+        Mes mes = festival.getMes();
+        if(!agenda.containsKey(mes)){
+            agenda.put(mes, new ArrayList<>());
+        }
+        ArrayList<Festival> festivales = agenda.get(mes);
+        int posicion = obtenerPosicionDeInsercion(festivales, festival);
+        festivales.add(posicion, festival);
         
         
     }
@@ -54,11 +60,16 @@ public class AgendaFestivales {
      * @return la posición en la que debería ir el nuevo festival
      * de forma que la lista quedase ordenada por nombre
      */
-    private int obtenerPosicionDeInsercion(ArrayList<Festival> festivales,
-                                           Festival festival) {
-       //TODO
+    private int obtenerPosicionDeInsercion(ArrayList<Festival> festivales, Festival festival) {
+       int posicion = 0;
+       for(Festival miFestival : festivales){
+           if(miFestival.getNombre().compareTo(festival.getNombre()) > 0){
+               break;
+           }
+           posicion++;
+       }
         
-        return 0;
+        return posicion;
         
     }
 
@@ -69,9 +80,17 @@ public class AgendaFestivales {
      */
     @Override
     public String toString() {
-        //TODO
+        StringBuilder sb = new StringBuilder();
+        for(Map.Entry<Mes, ArrayList<Festival>> entry : agenda.entrySet()){
+            sb.append(entry.getKey() + " : ");
+            for(Festival miFestival : entry.getValue()){
+                sb.append(miFestival.getNombre() + ", ");
+            }
+            sb.append("\n");
+
+        }
         
-        return null;
+        return sb.toString();
     }
 
     /**
